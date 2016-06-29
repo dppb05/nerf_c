@@ -464,7 +464,7 @@ int main(int argc, char **argv) {
     st_matrix *groups = asgroups(pred, objc, classc);
     printf("\nPartitions:\n");
     print_groups(groups);
-    sil = crispsil(groups, &dmatrix);
+    sil = crispsil(groups, &global_dmatrix);
     printf("\nCrisp silhouette:\n");
     print_silhouet(sil);
     silhouet *fsil = fuzzysil(sil, groups, &best_memb, 2.0);
