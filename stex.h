@@ -27,6 +27,8 @@ double partent(st_matrix *fuzmtx);
 
 double corand(int *labels, int *pred, size_t size);
 
+double avg_intra_dist(st_matrix *fuzmtx, st_matrix *dist, double mfuz);
+
 silhouet* crispsil(st_matrix *groups, st_matrix *dmatrix);
 
 silhouet* simplesil(int *labels, st_matrix *cent_dist);

@@ -149,6 +149,28 @@ double corand(int *labels, int *pred, size_t size) {
     return ((a + d) - term) / (p - term);
 }
 
+double avg_intra_dist(st_matrix *fuzmtx, st_matrix *dist, double mfuz) {
+    size_t clustc = fuzmtx->ncol;
+    size_t objc = fuzmtx->nrow;
+    size_t i;
+    size_t k;
+    double val;
+    double sumnum;
+    double sumden;
+    double ret = 0.0;
+    for(k = 0; k < clustc; ++k) {
+        sumnum = 0.0;
+        sumden = 0.0;
+        for(i = 0; i < objc; ++i) {
+            val = pow(get(fuzmtx, i, k), mfuz);
+            sumden += val;
+            sumnum += val * get(dist, i, k);
+        }
+        ret += (sumnum / sumden);
+    }
+    return (ret / (clustc * objc));
+}
+
 silhouet* crispsil(st_matrix *groups, st_matrix *dmatrix) {
     size_t i;
     size_t objc = 0;

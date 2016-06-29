@@ -445,13 +445,15 @@ int main(int argc, char **argv) {
     printf("\n");
     printf("beta: %.10lf\n", best_beta);
     print_memb(&best_memb);
-    printf("\nPartition coefficient: %.10lf\n", partcoef(&best_memb));
-    printf("Modified partition coefficient: %.10lf\n", modpcoef(&best_memb));
-    printf("Partition entropy: %.10lf\n", partent(&best_memb));
-    int *pred = defuz(&best_memb);
     st_matrix *best_dists_t = transpose(&best_dists);
     printf("\nDistances:\n");
     print_st_matrix(best_dists_t, 4, true);
+    printf("\nPartition coefficient: %.10lf\n", partcoef(&best_memb));
+    printf("Modified partition coefficient: %.10lf\n", modpcoef(&best_memb));
+    printf("Partition entropy: %.10lf\n", partent(&best_memb));
+    printf("Average intra cluster distance: %.10lf\n",
+            avg_intra_dist(&best_memb, best_dists_t , mfuz));
+    int *pred = defuz(&best_memb);
     silhouet *sil = simplesil(pred, best_dists_t);
     printf("\nSimple silhouette:\n");
     print_silhouet(sil);
