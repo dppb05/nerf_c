@@ -450,7 +450,7 @@ int main(int argc, char **argv) {
         groups = asgroups(pred, objc, classc);
         transpose_(&dists_t, &dists);
         csil = crispsil(groups, &dmatrix);
-        fsil = fuzzysil(csil, groups, &memb, 1.6);
+        fsil = fuzzysil(csil, groups, &memb, mfuz);
         ssil = simplesil(pred, &dists_t);
         if(i == 1) {
             avg_partcoef = partcoef(&memb);
