@@ -491,7 +491,7 @@ int main(int argc, char **argv) {
     printf("Best adequacy %.15lf on instance %d.\n", best_inst_adeq,
             best_inst);
     printf("\n");
-    printf("Beta: %.10lf\n", best_beta);
+    printf("Beta: %.10lf\n\n", best_beta);
     print_memb(&best_memb);
 
     pred = defuz(&best_memb);
