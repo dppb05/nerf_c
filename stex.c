@@ -107,7 +107,9 @@ double partent(st_matrix *fuzmtx) {
     for(k = 0; k < fuzmtx->ncol; ++k) {
         for(i = 0; i < fuzmtx->nrow; ++i) {
             val = get(fuzmtx, i, k);
-            ret +=  val * log(val);
+            if(val) {
+                ret +=  val * log(val);
+            }
         }
     }
     return -(ret / ((double) fuzmtx->nrow));
@@ -413,6 +415,21 @@ st_matrix* asgroups(int *labels, size_t size, size_t card) {
 //        printf("\n");
 //    }
 //}
+
+silhouet* avg_silhouet(silhouet *s1, silhouet *s2) {
+    if(s1->objc != s2->objc || s1->clustc != s2->clustc) {
+        return NULL;
+    }
+    size_t i;
+    for(i = 0; i < s1->objc; ++i) {
+        s1->objsil[i] = (s1->objsil[i] + s2->objsil[i]) / 2.0;
+    }
+    for(i = 0; i < s1->clustc; ++i) {
+        s1->clustsil[i] = (s1->clustsil[i] + s2->clustsil[i]) / 2.0;
+    }
+    s1->avgsil = (s1->avgsil + s2->avgsil);
+    return s1;
+}
 
 void free_silhouet(silhouet *s) {
     free(s->objsil);

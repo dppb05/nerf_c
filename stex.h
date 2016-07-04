@@ -41,6 +41,8 @@ st_matrix* asgroups(int *labels, size_t size, size_t card);
 //void print_groups(int *labels, size_t size, size_t card);
 void print_groups(st_matrix *groups);
 
+silhouet* avg_silhouet(silhouet *s1, silhouet *s2);
+
 void free_silhouet(silhouet *s);
 
 void print_silhouet(silhouet *s);

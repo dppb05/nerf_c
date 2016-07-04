@@ -177,6 +177,33 @@ int max(int *vec, size_t size) {
     return ret;
 }
 
+// Prints a header padded with '-' having 'str' in the center.
+// Params:
+//  str - an string to be print as header.
+//  size - length of the header, this has to be at least strlen(str)
+void print_header(char *str, size_t size) {
+    size_t str_size = strlen(str);
+    size_t buf_size = size;
+    if(buf_size < str_size) {
+        buf_size = str_size;
+    }
+    char buffer[buf_size];
+    size_t i;
+    size_t last = (buf_size / 2) - (str_size / 2);
+    for(i = 0; i < last; ++i) {
+        buffer[i] = '-';
+    }
+    size_t j;
+    for(j = 0; j < str_size; ++i, ++j) {
+        buffer[i] = str[j];
+    }
+    for(; i < buf_size; ++i) {
+        buffer[i] = '-';
+    }
+    buffer[i] = '\0';
+    printf("\n%s\n", buffer);
+}
+
 void mtxcpy_d(double **destination, double **source, size_t nrow,
         size_t ncol) {
     size_t i;
