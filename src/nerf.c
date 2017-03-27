@@ -333,6 +333,7 @@ double run() {
 
 int main(int argc, char **argv) {
     bool mean_idx = false;
+    bool comp_idx = false;
     FILE *cfgfile = fopen(argv[1], "r");
     if(!cfgfile) {
         printf("Error: could not open config file.\n");
@@ -430,7 +431,9 @@ int main(int argc, char **argv) {
     double avg_partent;
     double avg_aid;
     st_matrix dists_t;
-    init_st_matrix(&dists_t, dists.ncol, dists.nrow);
+    if(comp_idx || mean_idx) {
+        init_st_matrix(&dists_t, dists.ncol, dists.nrow);
+    }
     silhouet *csil;
     silhouet *fsil;
     silhouet *ssil;
@@ -497,10 +500,12 @@ int main(int argc, char **argv) {
     printf("Beta: %.10lf\n\n", best_beta);
     print_memb(&best_memb);
 
-    pred = defuz(&best_memb);
-    groups = asgroups(pred, objc, classc);
-    print_header("Partitions", HEADER_SIZE);
-    print_groups(groups);
+    if(comp_idx) {
+        pred = defuz(&best_memb);
+        groups = asgroups(pred, objc, classc);
+        print_header("Partitions", HEADER_SIZE);
+        print_groups(groups);
+    }
 
     if(mean_idx) {
         print_header("Average indexes", HEADER_SIZE);
@@ -511,15 +516,17 @@ int main(int argc, char **argv) {
         printf("Average intra cluster distance: %.10lf\n", avg_aid);
     }
 
-    transpose_(&dists_t, &best_dists);
-    print_header("Best instance indexes", HEADER_SIZE);
-    printf("\nPartition coefficient: %.10lf\n", partcoef(&best_memb));
-    printf("Modified partition coefficient: %.10lf\n",
-            modpcoef(&best_memb));
-    printf("Partition entropy: %.10lf (max: %.10lf)\n",
-            partent(&best_memb), log(clustc));
-    printf("Average intra cluster distance: %.10lf\n",
-            avg_intra_dist(&best_memb, &dists_t, mfuz));
+    if(comp_idx) {
+        transpose_(&dists_t, &best_dists);
+        print_header("Best instance indexes", HEADER_SIZE);
+        printf("\nPartition coefficient: %.10lf\n", partcoef(&best_memb));
+        printf("Modified partition coefficient: %.10lf\n",
+                modpcoef(&best_memb));
+        printf("Partition entropy: %.10lf (max: %.10lf)\n",
+                partent(&best_memb), log(clustc));
+        printf("Average intra cluster distance: %.10lf\n",
+                avg_intra_dist(&best_memb, &dists_t, mfuz));
+    }
 
     if(mean_idx) {
         print_header("Averaged crisp silhouette", HEADER_SIZE);
@@ -530,15 +537,18 @@ int main(int argc, char **argv) {
         print_silhouet(avg_ssil);
     }
 
-    csil = crispsil(groups, &dmatrix);
-    print_header("Best instance crisp silhouette", HEADER_SIZE);
-    print_silhouet(csil);
-    fsil = fuzzysil(csil, groups, &best_memb, 1.6);
-    print_header("Best instance fuzzy silhouette (m = 1.6)", HEADER_SIZE);
-    print_silhouet(fsil);
-    ssil = simplesil(pred, &dists_t);
-    print_header("Best instance simple silhouette", HEADER_SIZE);
-    print_silhouet(ssil);
+    if(comp_idx) {
+        csil = crispsil(groups, &dmatrix);
+        print_header("Best instance crisp silhouette", HEADER_SIZE);
+        print_silhouet(csil);
+        fsil = fuzzysil(csil, groups, &best_memb, 1.6);
+        print_header("Best instance fuzzy silhouette (m = 1.6)",
+                HEADER_SIZE);
+        print_silhouet(fsil);
+        ssil = simplesil(pred, &dists_t);
+        print_header("Best instance simple silhouette", HEADER_SIZE);
+        print_silhouet(ssil);
+    }
 
     if(mean_idx) {
         free_silhouet(avg_csil);
@@ -548,16 +558,20 @@ int main(int argc, char **argv) {
         free_silhouet(avg_ssil);
         free(avg_ssil);
     }
-    free_silhouet(csil);
-    free(csil);
-    free_silhouet(fsil);
-    free(fsil);
-    free_silhouet(ssil);
-    free(ssil);
-    free(pred);
-    free_st_matrix(groups);
-    free(groups);
-    free_st_matrix(&dists_t);
+    if(comp_idx) {
+        free_silhouet(csil);
+        free(csil);
+        free_silhouet(fsil);
+        free(fsil);
+        free_silhouet(ssil);
+        free(ssil);
+        free(pred);
+        free_st_matrix(groups);
+        free(groups);
+    }
+    if(comp_idx || mean_idx) {
+        free_st_matrix(&dists_t);
+    }
 END:
     fclose(stdout);
     free_st_matrix(&dmatrix);
