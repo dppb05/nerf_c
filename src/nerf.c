@@ -43,6 +43,7 @@ void init_memb() {
     }
 }
 
+// helps performing some tests
 void hard_init_memb(int *class) {
     size_t i;
     size_t k;
@@ -112,6 +113,7 @@ void global_dissim() {
             }
         }
     }
+    // for debugging
 //    printf("global_dmatrix:\n");
 //    print_st_matrix(&global_dmatrix, 7, true);
 }
@@ -128,6 +130,7 @@ void compute_membvec() {
             set(&membvec[k], i, 0, val);
             sum_den += val; 
         }
+        // for debugging
 //        val = 0.0;
         for(i = 0; i < objc; ++i) {
             set(&membvec[k], i, 0, get(&membvec[k], i, 0) / sum_den);
@@ -186,9 +189,8 @@ double compute_deltabeta() {
     for(i = 0; i < objc; ++i) {
         idcol[i] = 1.0;
         for(k = 0; k < clustc; ++k) {
-//            val = -2.0 * (get(&dists, k, i) /
-//                euclid_dist(membvec[k].mtx, idcol, objc));
             val = pow(euclid_dist(membvec[k].mtx, idcol, objc), 2.0);
+            // other way
 //            val = minkowski(membvec[k].mtx, idcol, objc, 2.0);
             if(val != 0.0) {
                 val = (-2.0 * get(&dists, k, i)) / val;
@@ -196,6 +198,7 @@ double compute_deltabeta() {
                     deltabeta = val;
                     first = false;
                 }
+                // for debugging
 //                printf("Current: %lf\nBest: %lf\n", val, deltabeta);
             }
         }
@@ -221,13 +224,14 @@ bool adjust_dists() {
     for(i = 0; i < objc; ++i) {
         for(k = 0; k < clustc; ++k) {
             idcol[i] = 1.0;
+            // for debugging
 //            printf("%lf + %lf * %lf\n", get(&dists, k, i), deltabeta,
 //                    euclid_dist(membvec[k].mtx, idcol, objc));
             set(&dists, k, i, get(&dists, k, i) + deltabeta *
-//                    minkowski(membvec[k].mtx, idcol, objc, 2.0));
                     pow(euclid_dist(membvec[k].mtx, idcol, objc), 2.0));
+                    // old way
+//                    minkowski(membvec[k].mtx, idcol, objc, 2.0));
             idcol[i] = 0.0;
-//            if(!hasneg && dlt(get(&dists, k, i), 0.0)) {
             if(!hasneg && get(&dists, k, i) < 0.0) {
                 hasneg = true;
             }
@@ -276,6 +280,7 @@ void update_memb() {
 }
 
 double run() {
+    // for testing
 //    int initvec[] = {0, 0, 1};
 //    hard_init_memb(initvec);
     init_memb();
@@ -286,6 +291,7 @@ double run() {
     double prev_iter_adeq;
     double adeq_diff;
     size_t iter = 1;
+    // for debugging
 //    st_matrix prev_memb;
 //    init_st_matrix(&prev_memb, objc, clustc);
     do {
