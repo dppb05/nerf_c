@@ -157,10 +157,10 @@ bool compute_dists() {
     bool hasneg = false;
     for(k = 0; k < clustc; ++k) {
         transpose_(&membvec_trans, &membvec[k]);
+        mtxmult_(&term1, &global_dmatrix, &membvec[k]);
         mtxmult_(&aux_mtx, &membvec_trans, &global_dmatrix);
         mtxmult_(&aux_mtx2, &aux_mtx, &membvec[k]);
         term2 = get(&aux_mtx2, 0, 0) * 0.5;
-        mtxmult_(&term1, &global_dmatrix, &membvec[k]);
         for(i = 0; i < objc; ++i) {
             set(&dists, k, i, get(&term1, i, 0) - term2);
             if(!hasneg && get(&dists, k, i) < 0.0) {
