@@ -91,7 +91,8 @@ double adequacy() {
         for(i = 0; i < objc; ++i) {
             for(h = 0; h < objc; ++h) {
                 sum_num += pow(get(&memb, i, k), mfuz) *
-                    pow(get(&memb, h, k), mfuz) * get(&dmatrix, i, h);
+                    pow(get(&memb, h, k), mfuz) *
+                    get(&global_dmatrix, i, h);
             }
             sum_den += pow(get(&memb, i, k), mfuz);
         }
@@ -286,6 +287,7 @@ double run() {
     init_memb();
     print_memb(&memb);
     beta = 0.0;
+    mtxcpy(&global_dmatrix, &dmatrix);
     double adeq = adequacy();
     printf("Adequacy: %.15lf\n", adeq);
     double prev_iter_adeq;
