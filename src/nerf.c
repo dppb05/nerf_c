@@ -462,7 +462,7 @@ int main(int argc, char **argv) {
             pred = defuz(&memb);
             groups = asgroups(pred, objc, classc);
             transpose_(&dists_t, &dists);
-            csil = crispsil(groups, &dmatrix);
+            csil = crispsil(groups, &global_dmatrix);
             fsil = fuzzysil(csil, groups, &memb, mfuz);
             ssil = simplesil(pred, &dists_t);
             if(i == 1) {
@@ -546,7 +546,7 @@ int main(int argc, char **argv) {
     }
 
     if(comp_idx) {
-        csil = crispsil(groups, &dmatrix);
+        csil = crispsil(groups, &global_dmatrix);
         print_header("Best instance crisp silhouette", HEADER_SIZE);
         print_silhouet(csil);
         fsil = fuzzysil(csil, groups, &best_memb, 1.6);
