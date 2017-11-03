@@ -403,6 +403,14 @@ int main(int argc, char **argv) {
         fclose(cfgfile);
         return 1;
     }
+    int seed;
+    char seedstr[16];
+    fscanf(cfgfile, "%s", seedstr);
+    if(!strcmp(seedstr, "RAND")) {
+        seed = time(NULL);
+    } else {
+        seed = atoi(seedstr);
+    }
     fclose(cfgfile);
     freopen(outfilename, "w", stdout);
     printf("###Configuration summary:###\n");
@@ -410,8 +418,10 @@ int main(int argc, char **argv) {
     printf("Number of clusters: %d\n", clustc);
     printf("Number of instances: %d\n", insts);
     printf("Maximum interations: %d\n", max_iter);
+    printf("Epsilon: %.15lf\n", epsilon);
     printf("Parameter m: %lf\n", mfuz);
     printf("Parameter q: %lf\n", qexp);
+    printf("Seed: %d\n", seed);
     printf("############################\n");
     st_matrix best_memb;
     st_matrix best_dists;
@@ -450,7 +460,7 @@ int main(int argc, char **argv) {
     silhouet *avg_ssil;
     int *pred;
     st_matrix *groups;
-    srand(time(NULL));
+    srand(seed);
     size_t best_inst;
     double best_inst_adeq;
     double best_beta;

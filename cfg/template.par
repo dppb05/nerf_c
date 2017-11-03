@@ -8,3 +8,4 @@ maximum_iterations
 parameter_epsilon
 parameter_m
 parameter_q
+seed
